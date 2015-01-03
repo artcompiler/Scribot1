@@ -87,25 +87,25 @@ float millimetersToSteps(float distance)
 void calibrate()
 {
   penDown();
-  step(3600, 0);  // LF
+  step(3600, 0);  // Left Forward (LF)
   penUp();
   step(-450, 450);
   step(100, 100);
   step(-450, 450);
   penDown();
-  step(0, 3600);  // RF
+  step(0, 3600);  // Right Forward (RF)
   penUp();
   step(450, -450);
   step(100, 100);
   step(450, -450);
   penDown();
-  step(-3600, 0);  // LB
+  step(-3600, 0);  // Left Backward (LB)
   penUp();
   step(-450, 450);
   step(100, 100);
   step(-450, 450);
   penDown();
-  step(0, -3600);  // RB
+  step(0, -3600);  // Right Backward (RB)
   penUp();
 }
 
@@ -126,6 +126,7 @@ void move(float distance)
 
 void arc(int radius, int angle)
 {
+  // FIXME this function is not done yet.
   int leftSteps, rightSteps;
   int ratio = 2 * radius / CIRCLE_DIAM;
   leftSteps = 1800 + CIRCLE_STEPS * ratio;
@@ -139,20 +140,6 @@ void circle(int radius)
 {
   penDown();
   step(-1000, 2600);
-  penUp();
-}  
-
-void circleLeft()
-{
-  penDown();
-  step(0, 3600);
-  penUp();
-}  
-
-void circleRight()
-{
-  penDown();
-  step(3600, 0);
   penUp();
 }  
 
