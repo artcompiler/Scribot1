@@ -68,12 +68,10 @@ void setup(void)
   stepper2.setMaxSpeed(SPEED);
   myservo.attach(A4);
 
-  // Calibrate bot upon first use
-  //calibrate();
-  penUp();  // Pen up to avoid unintended marks
-
   // PUT COMMANDS HERE
-  draw();
+  calibrate();  // Upon first use, calibrate your bot.
+
+  // RETURN PEN TO UP POSITION
   penUp();
 }
 
