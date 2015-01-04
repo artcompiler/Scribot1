@@ -1,6 +1,8 @@
 /* -*- Mode: c++; c-indent-level: 2; indent-tabs-mode: nil; tab-width: 2 -*- */
 /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
 /*
+  Copyright 2015 Art Compiler LLC
+
   Before you can draw accurately with Scribot1 you need to calibrate the bot.
   This is done by executing the 'calibrate()' function and adjusting the values
   for DEFAULT_CALIBRATION, LF_CALIBRATION, RF_CALIBRATION, LB_CALIBRATION
@@ -43,7 +45,6 @@ AccelStepper stepper2(AccelStepper::FULL4WIRE, motorPin5, motorPin7, motorPin6, 
 
 // Construct servo object.
 Servo myservo;
-int pos = 60;    // Servo position 
 // END SERVO DECLS
 
 // CALIBRATE THESE VALUES FOR YOUR BOT
@@ -51,7 +52,7 @@ const float DEFAULT_CALIBRATION = 3.63;
 const float LF_CALIBRATION = DEFAULT_CALIBRATION + 0.01;
 const float RF_CALIBRATION = DEFAULT_CALIBRATION + 0.01;
 const float LB_CALIBRATION = DEFAULT_CALIBRATION + 0.02;
-const float RB_CALIBRATION = DEFAULT_CALIBRATION - 0.01;
+const float RB_CALIBRATION = DEFAULT_CALIBRATION - 0.00;
 const float CIRCLE_DIAM = 131.0;   // Diameter of calibration circles in millimeters
 const float CIRCLE_CIRCUM = CIRCLE_DIAM * PI;
 const float CIRCLE_STEPS = 3600 * DEFAULT_CALIBRATION;
@@ -59,22 +60,39 @@ const float STEP_LENGTH = 2 * CIRCLE_CIRCUM / CIRCLE_STEPS; // 2x because wheel 
 
 void setup(void)
 {
+  // Initailize serial port
   Serial.begin(115200);
+
   // Initialize steppers and servo.
   stepper1.setMaxSpeed(SPEED);
   stepper2.setMaxSpeed(SPEED);
   myservo.attach(A4);
+
+  // Calibrate bot upon first use
+  //calibrate();
   penUp();  // Pen up to avoid unintended marks
+
   // PUT COMMANDS HERE
-  //  calibrate();
-  //  square(100);
-  // triangle(100);
-  arc(10, 3600);
+  draw();
+  penUp();
 }
 
 void loop(void)
 {
 }
+
+void draw() {
+  square(80);
+  turn(180);
+  move(10);
+  turn(90);
+  move(10);
+  triangle(85);
+  move(50);
+  turn(90);
+  circle(50);
+  penUp();
+}  
 
 float millimetersToSteps(float distance)
 {
@@ -111,81 +129,88 @@ void calibrate()
 
 void line(float distance)
 {
-  int steps = millimetersToSteps(distance);
   penDown();
+  int steps = millimetersToSteps(distance);
   step(steps, steps);
-  penUp();
 }
 
 void move(float distance)
 {
-  int steps = millimetersToSteps(distance);
   penUp();
+  int steps = millimetersToSteps(distance);
   step(steps, steps);
 }
 
-void arc(int radius, int angle)
+/*
+  Draw an arc with radius in millimeters and angle in desgres
+*/
+void arc(float radius, float angle)
 {
-  // FIXME this function is not done yet.
-  int leftSteps, rightSteps;
-  int ratio = 2 * radius / CIRCLE_DIAM;
-  leftSteps = 1800 + CIRCLE_STEPS * ratio;
-  rightSteps = -3600 + leftSteps;
   penDown();
+  float diameterRatio = 2 * radius / CIRCLE_DIAM;
+  float angleRatio = angle / 360;
+  int leftSteps = (1800 + 1800 * diameterRatio) * angleRatio;
+  int rightSteps = (leftSteps - 3600) * angleRatio; 
   step(leftSteps, rightSteps);
-  penUp();
 }  
 
-void circle(int radius)
+void turn(float angle)
 {
-  penDown();
-  step(-1000, 2600);
   penUp();
+  const int fullSteps = 1800;
+  float angleRatio = angle / 360;
+  int leftSteps = fullSteps * angleRatio;
+  int rightSteps = -fullSteps * angleRatio;
+  step(leftSteps, rightSteps);
+}
+
+void circle(float radius)
+{
+  arc(radius, 360);
 }  
 
 void square(int size)
 {
   line(size);
-  step(450, -450);
+  turn(90);
   line(size);
-  step(450, -450);
+  turn(90);
   line(size);
-  step(450, -450);
+  turn(90);
   line(size);
-  step(450, -450);
+  turn(90);
 }  
 
 void triangle(int size)
 {
   line(size);
-  step(600, -600);
+  turn(120);
   line(size);
-  step(600, -600);
+  turn(120);
   line(size);
-  step(600, -600);
+  turn(120);
 }  
 
+const int PEN_DOWN = 30;
+const int PEN_UP = 90;
+int pos = PEN_UP;
 void penUp()
 {
-  for(; pos < 60; pos += 1)  // goes from 0 degrees to 180 degrees 
+  for(; pos < PEN_UP; pos += 1)  // goes from 0 degrees to 180 degrees 
   {                                 // in steps of 1 degree 
     myservo.write(pos);              // tell servo to go to position in variable 'pos' 
     delay(15);                       // waits 15ms for the servo to reach the position 
-    // waits 15ms for the servo to reach the position 
   } 
-  pos = 60;
   myservo.write(pos);              // tell servo to go to position in variable 'pos' 
 }
 
 void penDown()
 {
-  for(; pos > 0; pos -= 1)  // goes from 0 degrees to 180 degrees 
+  for(; pos > PEN_DOWN; pos -= 1)  // goes from 0 degrees to 180 degrees 
   {                                  // in steps of 1 degree 
     myservo.write(pos);              // tell servo to go to position in variable 'pos' 
     delay(15);                       // waits 15ms for the servo to reach the position 
-    // waits 15ms for the servo to reach the position 
   }
-  pos = 0;
   myservo.write(pos);              // tell servo to go to position in variable 'pos' 
 }
 
