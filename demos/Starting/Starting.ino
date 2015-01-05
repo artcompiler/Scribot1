@@ -70,7 +70,8 @@ void setup(void)
 
   // PUT COMMANDS HERE
   calibrate();  // Upon first use, calibrate your bot.
-
+//  drawShapes();
+  
   // RETURN PEN TO UP POSITION
   penUp();
 }
@@ -79,7 +80,8 @@ void loop(void)
 {
 }
 
-void draw() {
+void drawShapes() 
+{
   square(80);
   turn(180);
   move(10);
@@ -147,8 +149,10 @@ void arc(float radius, float angle)
   penDown();
   float diameterRatio = 2 * radius / CIRCLE_DIAM;
   float angleRatio = angle / 360;
-  int leftSteps = (1800 + 1800 * diameterRatio) * angleRatio;
-  int rightSteps = (leftSteps - 3600) * angleRatio; 
+  float leftSteps = (1800 + 1800 * diameterRatio);
+  float rightSteps = (leftSteps - 3600);
+  leftSteps *= angleRatio;
+  rightSteps *= angleRatio;
   step(leftSteps, rightSteps);
 }  
 
