@@ -1,9 +1,9 @@
-Starting | Scribot1
-===================
+Starting | Scribot
+==================
 
 ## Calibrating
 
-Before you can draw accurately with Scribot1 you need to calibrate the bot. This is done by executing the 'calibrate()' function and adjusting the values for DEFAULT_CALIBRATION, LF_CALIBRATION, RF_CALIBRATION, LB_CALIBRATION and RB_CALIBRATION.
+Before you can draw accurately with Scribot you need to calibrate the bot. This is done by executing the 'calibrate()' function and adjusting the values for DEFAULT_CALIBRATION, LF_CALIBRATION, RF_CALIBRATION, LB_CALIBRATION and RB_CALIBRATION.
 
 Begin by adjusting DEFAULT_CALIBRATION until the bot draws circles where the drawing error is long in at least one direction and short in at least one other. Then iterate while adjusting the four specific calibration factors.
 
@@ -11,7 +11,7 @@ It should be possible to draw circles where the error is less than 1mm in all fo
 
 ## Drawing
 
-The Scribot1 code implements two drawing interfaces. The lowest level interface (Level 0) reflects the primitive operations of the machine, in particular moving the pen up and down and moving the wheels forward and backward. A slightly higher level interface (Level 1) expresses commands for drawing basic shapes.
+The Scribot code implements two drawing interfaces. The lowest level interface (Level 0) reflects the primitive operations of the machine, in particular moving the pen up and down and moving the wheels forward and backward. A slightly higher level interface (Level 1) expresses commands for drawing basic shapes.
 
 These commands (functions or procedures) can be called from the ```setup()``` function of the main program file.
 

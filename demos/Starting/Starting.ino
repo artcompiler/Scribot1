@@ -3,15 +3,29 @@
 /*
   Copyright 2015 Art Compiler LLC
 
-  Before you can draw accurately with Scribot1 you need to calibrate the bot.
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+*/
+
+/*
+  Before you can draw accurately with Scribot you need to calibrate the bot.
   This is done by executing the 'calibrate()' function and adjusting the values
   for DEFAULT_CALIBRATION, LF_CALIBRATION, RF_CALIBRATION, LB_CALIBRATION
   and RB_CALIBRATION.
-
+  
   Begin by adjusting DEFAULT_CALIBRATION until the bot draws circles where the
   drawing error is long in at least one direction and short in at least one
   other. Then interate while adjusting the four specific calibration factors.
-
+  
   It should be possible to draw circles where the error is less than 1mm in all
   four directions.
 */
@@ -69,8 +83,8 @@ void setup(void)
   myservo.attach(A4);
 
   // PUT COMMANDS HERE
-  calibrate();  // Upon first use, calibrate your bot.
-//  drawShapes();
+//  calibrate();  // Upon first use, calibrate your bot.
+  drawShapes(); //drawLightBulb();
   
   // RETURN PEN TO UP POSITION
   penUp();
@@ -80,8 +94,110 @@ void loop(void)
 {
 }
 
+void drawLightBulb()
+{
+}
+
 void drawShapes() 
 {
+penDown();
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, 700);
+step(100, 800);
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, 700);
+step(100, 800);
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, 700);
+step(100, 800);
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, 700);
+step(100, -800);
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, -700);
+step(100, 800);
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, 700);
+step(100, 800);
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, -600);
+step(100, 700);
+step(100, 800);
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, 700);
+step(100, 800);
+step(100, -300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, 700);
+step(100, 800);
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, 700);
+step(100, 800);
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, 700);
+step(100, 800);
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, 700);
+step(100, 800);
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, 700);
+step(100, 800);
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, 700);
+step(100, 800);
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, 700);
+step(100, 800);
+step(100, 300);
+step(100, 400);
+step(100, 500);
+step(100, 600);
+step(100, 700);
+step(100, 800);
+/*
   square(80);
   turn(180);
   move(10);
@@ -92,6 +208,7 @@ void drawShapes()
   turn(90);
   circle(50);
   penUp();
+*/
 }  
 
 float millimetersToSteps(float distance)
@@ -151,6 +268,8 @@ void arc(float radius, float angle)
   float angleRatio = angle / 360;
   float leftSteps = (1800 + 1800 * diameterRatio);
   float rightSteps = (leftSteps - 3600);
+  Serial.print("leftSteps="); Serial.println(leftSteps);
+  Serial.print("rightSteps="); Serial.println(rightSteps);
   leftSteps *= angleRatio;
   rightSteps *= angleRatio;
   step(leftSteps, rightSteps);
@@ -218,6 +337,8 @@ void penDown()
 
 void step(long lsteps, long rsteps)
 {
+  Serial.print("lsteps="); Serial.println(lsteps);
+  Serial.print("rsteps="); Serial.println(rsteps);
   int dirL = (lsteps > 0) ? FORWARD : BACKWARD;
   int dirR = (rsteps > 0) ? FORWARD : BACKWARD;
   lsteps = abs(lsteps) * (dirL == FORWARD ? LF_CALIBRATION : LB_CALIBRATION);
