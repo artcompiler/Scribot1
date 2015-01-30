@@ -34,15 +34,15 @@
 #include <AccelStepper.h>
 
 // Define motor pins.
-#define motorPin1  A0     // Blue   - 28BYJ48 pin 1
-#define motorPin2  A1     // Pink   - 28BYJ48 pin 2
-#define motorPin3  A2     // Yellow - 28BYJ48 pin 3
-#define motorPin4  A3     // Orange - 28BYJ48 pin 4
+#define motorPin1  5     // Blue   - 28BYJ48 pin 1
+#define motorPin2  6     // Pink   - 28BYJ48 pin 2
+#define motorPin3  7     // Yellow - 28BYJ48 pin 3
+#define motorPin4  8     // Orange - 28BYJ48 pin 4
 
-#define motorPin5  6      // Blue   - 28BYJ48 pin 1
-#define motorPin6  7      // Pink   - 28BYJ48 pin 2
-#define motorPin7  8      // Yellow - 28BYJ48 pin 3
-#define motorPin8  9      // Orange - 28BYJ48 pin 4
+#define motorPin5  9     // Blue   - 28BYJ48 pin 1
+#define motorPin6  10    // Pink   - 28BYJ48 pin 2
+#define motorPin7  11    // Yellow - 28BYJ48 pin 3
+#define motorPin8  12    // Orange - 28BYJ48 pin 4
 
 #define BACKWARD 1
 #define FORWARD -1
@@ -62,7 +62,7 @@ Servo myservo;
 // END SERVO DECLS
 
 // CALIBRATE THESE VALUES FOR YOUR BOT
-const float DEFAULT_CALIBRATION = 3.63;
+const float DEFAULT_CALIBRATION = 3.62;
 const float LF_CALIBRATION = DEFAULT_CALIBRATION + 0.00;
 const float RF_CALIBRATION = DEFAULT_CALIBRATION + 0.00;
 const float LB_CALIBRATION = DEFAULT_CALIBRATION + 0.00;
@@ -80,11 +80,11 @@ void setup(void)
   // Initialize steppers and servo.
   stepper1.setMaxSpeed(SPEED);
   stepper2.setMaxSpeed(SPEED);
-  myservo.attach(A4);
+  myservo.attach(4);
 
   // PUT COMMANDS HERE
-//  calibrate();  // Upon first use, calibrate your bot.
-  drawShapes(); //drawLightBulb();
+  calibrate();  // Upon first use, calibrate your bot.
+ // drawShapes(); //drawLightBulb();
   
   // RETURN PEN TO UP POSITION
   penUp();
@@ -94,31 +94,29 @@ void loop(void)
 {
 }
 
-void drawLightBulb()
+const int PEN_DOWN = 30;
+const int PEN_UP = 90;
+int pos = PEN_UP;
+void penUp()
 {
+  pos = PEN_UP;
+  for(; pos < PEN_UP; pos += 1)  // goes from 0 degrees to 180 degrees 
+  {                                 // in steps of 1 degree 
+    myservo.write(pos);              // tell servo to go to position in variable 'pos' 
+    delay(15);                       // waits 15ms for the servo to reach the position 
+  } 
+  myservo.write(pos);              // tell servo to go to position in variable 'pos' 
 }
 
-void drawShapes() 
+void penDown()
 {
-  penDown();
-  square(80);
-  turn(180);
-  move(10);
-  turn(90);
-  move(10);
-  triangle(85);
-  move(50);
-  turn(90);
-  circle(50);
-  penUp();
-}  
-
-float millimetersToSteps(float distance)
-{
-  float calibration = distance > 0
-    ? (LF_CALIBRATION + RF_CALIBRATION) / 2
-    : (LB_CALIBRATION + RB_CALIBRATION) / 2;  // Get average of left and right
-  return distance / STEP_LENGTH / calibration;
+  pos = PEN_DOWN;
+  for(; pos > PEN_DOWN; pos -= 1)  // goes from 0 degrees to 180 degrees 
+  {                                  // in steps of 1 degree 
+    myservo.write(pos);              // tell servo to go to position in variable 'pos' 
+    delay(15);                       // waits 15ms for the servo to reach the position 
+  }
+  myservo.write(pos);              // tell servo to go to position in variable 'pos' 
 }
 
 void calibrate()
@@ -144,6 +142,29 @@ void calibrate()
   penDown();
   step(0, -3600);  // Right Backward (RB)
   penUp();
+}
+
+void drawShapes() 
+{
+  penDown();
+  square(80);
+  turn(180);
+  move(10);
+  turn(90);
+  move(10);
+  triangle(85);
+  move(50);
+  turn(90);
+  circle(50);
+  penUp();
+}  
+
+float millimetersToSteps(float distance)
+{
+  float calibration = distance > 0
+    ? (LF_CALIBRATION + RF_CALIBRATION) / 2
+    : (LB_CALIBRATION + RB_CALIBRATION) / 2;  // Get average of left and right
+  return distance / STEP_LENGTH / calibration;
 }
 
 void line(float distance)
@@ -212,29 +233,6 @@ void triangle(int size)
   turn(120);
   line(size);
   turn(120);
-}  
-
-const int PEN_DOWN = 30;
-const int PEN_UP = 90;
-int pos = PEN_UP;
-void penUp()
-{
-  for(; pos < PEN_UP; pos += 1)  // goes from 0 degrees to 180 degrees 
-  {                                 // in steps of 1 degree 
-    myservo.write(pos);              // tell servo to go to position in variable 'pos' 
-    delay(15);                       // waits 15ms for the servo to reach the position 
-  } 
-  myservo.write(pos);              // tell servo to go to position in variable 'pos' 
-}
-
-void penDown()
-{
-  for(; pos > PEN_DOWN; pos -= 1)  // goes from 0 degrees to 180 degrees 
-  {                                  // in steps of 1 degree 
-    myservo.write(pos);              // tell servo to go to position in variable 'pos' 
-    delay(15);                       // waits 15ms for the servo to reach the position 
-  }
-  myservo.write(pos);              // tell servo to go to position in variable 'pos' 
 }
 
 void step(long lsteps, long rsteps)
@@ -296,16 +294,16 @@ void stepOne(int dirL, int dirR, float speed) {
   stepper2.runSpeedToPosition();
 }
 
-void stepOneLeft(int dirL, float speed) {
+void stepOneRight(int dir, float speed) {
   delayMicroseconds(DELAY); 
-  stepper2.move(dirL*-1);
+  stepper2.move(dir*-1);
   stepper2.setSpeed(speed);
   stepper2.runSpeedToPosition();
 }
 
-void stepOneRight(int dirR, float speed) {
+void stepOneLeft(int dir, float speed) {
   delayMicroseconds(DELAY); 
-  stepper1.move(dirR);
+  stepper1.move(dir);
   stepper1.setSpeed(speed);
   stepper1.runSpeedToPosition();
 }
