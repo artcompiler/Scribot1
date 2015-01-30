@@ -67,7 +67,7 @@ const float LF_CALIBRATION = DEFAULT_CALIBRATION + 0.00;
 const float RF_CALIBRATION = DEFAULT_CALIBRATION + 0.00;
 const float LB_CALIBRATION = DEFAULT_CALIBRATION + 0.00;
 const float RB_CALIBRATION = DEFAULT_CALIBRATION + 0.00;
-const float CIRCLE_DIAM = 131.0;   // Diameter of calibration circles in millimeters
+const float CIRCLE_DIAM = 128.0;   // Diameter of calibration circles in millimeters
 const float CIRCLE_CIRCUM = CIRCLE_DIAM * PI;
 const float CIRCLE_STEPS = 3600 * DEFAULT_CALIBRATION;
 const float STEP_LENGTH = 2 * CIRCLE_CIRCUM / CIRCLE_STEPS; // 2x because wheel travels twice as far
@@ -84,8 +84,8 @@ void setup(void)
 
   // PUT COMMANDS HERE
   calibrate();  // Upon first use, calibrate your bot.
- // drawShapes(); //drawLightBulb();
-  
+//  drawShapes();
+
   // RETURN PEN TO UP POSITION
   penUp();
 }
@@ -95,11 +95,10 @@ void loop(void)
 }
 
 const int PEN_DOWN = 30;
-const int PEN_UP = 90;
+const int PEN_UP = 60;
 int pos = PEN_UP;
 void penUp()
 {
-  pos = PEN_UP;
   for(; pos < PEN_UP; pos += 1)  // goes from 0 degrees to 180 degrees 
   {                                 // in steps of 1 degree 
     myservo.write(pos);              // tell servo to go to position in variable 'pos' 
@@ -110,7 +109,6 @@ void penUp()
 
 void penDown()
 {
-  pos = PEN_DOWN;
   for(; pos > PEN_DOWN; pos -= 1)  // goes from 0 degrees to 180 degrees 
   {                                  // in steps of 1 degree 
     myservo.write(pos);              // tell servo to go to position in variable 'pos' 
@@ -157,7 +155,7 @@ void drawShapes()
   turn(90);
   circle(50);
   penUp();
-}  
+}
 
 float millimetersToSteps(float distance)
 {
@@ -191,8 +189,6 @@ void arc(float radius, float angle)
   float angleRatio = angle / 360;
   float leftSteps = (1800 + 1800 * diameterRatio);
   float rightSteps = (leftSteps - 3600);
-  Serial.print("leftSteps="); Serial.println(leftSteps);
-  Serial.print("rightSteps="); Serial.println(rightSteps);
   leftSteps *= angleRatio;
   rightSteps *= angleRatio;
   step(leftSteps, rightSteps);
@@ -237,8 +233,6 @@ void triangle(int size)
 
 void step(long lsteps, long rsteps)
 {
-  Serial.print("lsteps="); Serial.println(lsteps);
-  Serial.print("rsteps="); Serial.println(rsteps);
   int dirL = (lsteps > 0) ? FORWARD : BACKWARD;
   int dirR = (rsteps > 0) ? FORWARD : BACKWARD;
   lsteps = abs(lsteps) * (dirL == FORWARD ? LF_CALIBRATION : LB_CALIBRATION);
@@ -285,11 +279,11 @@ void step(long lsteps, long rsteps)
 }
 
 void stepOne(int dirL, int dirR, float speed) {
-  delayMicroseconds(DELAY); 
-  stepper1.move(dirR*1);
+  delayMicroseconds(DELAY);
+  stepper1.move(dirL);
   stepper1.setSpeed(speed);
   stepper1.runSpeedToPosition();
-  stepper2.move(dirL*-1);
+  stepper2.move(dirR*-1);
   stepper2.setSpeed(speed);
   stepper2.runSpeedToPosition();
 }
