@@ -62,11 +62,13 @@ Servo myservo;
 // END SERVO DECLS
 
 // CALIBRATE THESE VALUES FOR YOUR BOT
-const float DEFAULT_CALIBRATION = 3.62;
-const float LF_CALIBRATION = DEFAULT_CALIBRATION + 0.00;
-const float RF_CALIBRATION = DEFAULT_CALIBRATION + 0.00;
-const float LB_CALIBRATION = DEFAULT_CALIBRATION + 0.00;
-const float RB_CALIBRATION = DEFAULT_CALIBRATION + 0.00;
+// -- After calibrating the lines, the total calibration needs to stay the same
+//    for each combintation of DEFAULT+LF+RB and DEFAULT+RF+LB
+const float DEFAULT_CALIBRATION = 3.660;
+const float LF_CALIBRATION = DEFAULT_CALIBRATION - 0.015;
+const float RF_CALIBRATION = DEFAULT_CALIBRATION - 0.005;
+const float LB_CALIBRATION = DEFAULT_CALIBRATION - 0.015;
+const float RB_CALIBRATION = DEFAULT_CALIBRATION - 0.005;
 const float CIRCLE_DIAM = 128.0;   // Diameter of calibration circles in millimeters
 const float CIRCLE_CIRCUM = CIRCLE_DIAM * PI;
 const float CIRCLE_STEPS = 3600 * DEFAULT_CALIBRATION;
@@ -83,9 +85,12 @@ void setup(void)
   myservo.attach(4);
 
   // PUT COMMANDS HERE
-  calibrate();  // Upon first use, calibrate your bot.
+//  calibrateLevel();  // Upon first use, calibrate your bot.
+//  calibrateRightTurns();
+//  calibrateRightTurns();
+  calibrateCircles();  // Upon first use, calibrate your bot.
 //  drawShapes();
-
+//  stars();
   // RETURN PEN TO UP POSITION
   penUp();
 }
@@ -117,7 +122,44 @@ void penDown()
   myservo.write(pos);              // tell servo to go to position in variable 'pos' 
 }
 
-void calibrate()
+void calibrateLevel()
+{
+  penDown();
+  step(1800, -1800);
+  step(30, 30);
+  step(-1800, 1800);
+  penUp();
+}
+
+void calibrateRightTurns()
+{
+  penDown();
+  step(500, 500);
+  step(900, -900);
+  step(500, 500);
+  step(900, -900);
+  step(500, 500);
+  step(900, -900);
+  step(500, 500);
+  step(900, -900);
+  penUp();
+}
+
+void calibrateLeftTurns()
+{
+  penDown();
+  step(500, 500);
+  step(-900, 900);
+  step(500, 500);
+  step(-900, 900);
+  step(500, 500);
+  step(-900, 900);
+  step(500, 500);
+  step(-900, 900);
+  penUp();
+}
+
+void calibrateCircles()
 {
   penDown();
   step(3600, 0);  // Left Forward (LF)
@@ -140,6 +182,9 @@ void calibrate()
   penDown();
   step(0, -3600);  // Right Backward (RB)
   penUp();
+  step(450, -450);
+  step(100, 100);
+  step(450, -450);
 }
 
 void drawShapes() 
@@ -219,7 +264,7 @@ void square(int size)
   turn(90);
   line(size);
   turn(90);
-}  
+}
 
 void triangle(int size)
 {
@@ -231,8 +276,254 @@ void triangle(int size)
   turn(120);
 }
 
+void stars()
+{
+penUp();
+step(250, -250);
+penUp();
+step(135, 135);
+penUp();
+step(-250, 250);
+penDown();
+step(200, 200);
+penUp();
+step(-700, 700);
+penDown();
+step(200, 200);
+penUp();
+step(400, -400);
+penDown();
+step(200, 200);
+penUp();
+step(-700, 700);
+penDown();
+step(200, 200);
+penUp();
+step(400, -400);
+penDown();
+step(200, 200);
+penUp();
+step(-700, 700);
+penDown();
+step(200, 200);
+penUp();
+step(400, -400);
+penDown();
+step(200, 200);
+penUp();
+step(-700, 700);
+penDown();
+step(200, 200);
+penUp();
+step(400, -400);
+penDown();
+step(200, 200);
+penUp();
+step(-700, 700);
+penDown();
+step(200, 200);
+penUp();
+step(400, -400);
+penDown();
+step(200, 200);
+penUp();
+step(-700, 700);
+penDown();
+step(200, 200);
+penUp();
+step(400, -400);
+penUp();
+step(-650, 650);
+penUp();
+step(135, 135);
+penUp();
+step(650, -650);
+penUp();
+step(250, -250);
+penUp();
+step(101, 101);
+penUp();
+step(-250, 250);
+penDown();
+step(150, 150);
+penUp();
+step(-700, 700);
+penDown();
+step(150, 150);
+penUp();
+step(400, -400);
+penDown();
+step(150, 150);
+penUp();
+step(-700, 700);
+penDown();
+step(150, 150);
+penUp();
+step(400, -400);
+penDown();
+step(150, 150);
+penUp();
+step(-700, 700);
+penDown();
+step(150, 150);
+penUp();
+step(400, -400);
+penDown();
+step(150, 150);
+penUp();
+step(-700, 700);
+penDown();
+step(150, 150);
+penUp();
+step(400, -400);
+penDown();
+step(150, 150);
+penUp();
+step(-700, 700);
+penDown();
+step(150, 150);
+penUp();
+step(400, -400);
+penDown();
+step(150, 150);
+penUp();
+step(-700, 700);
+penDown();
+step(150, 150);
+penUp();
+step(400, -400);
+penUp();
+step(-650, 650);
+penUp();
+step(101, 101);
+penUp();
+step(650, -650);
+penUp();
+step(250, -250);
+penUp();
+step(67, 67);
+penUp();
+step(-250, 250);
+penDown();
+step(100, 100);
+penUp();
+step(-700, 700);
+penDown();
+step(100, 100);
+penUp();
+step(400, -400);
+penDown();
+step(100, 100);
+penUp();
+step(-700, 700);
+penDown();
+step(100, 100);
+penUp();
+step(400, -400);
+penDown();
+step(100, 100);
+penUp();
+step(-700, 700);
+penDown();
+step(100, 100);
+penUp();
+step(400, -400);
+penDown();
+step(100, 100);
+penUp();
+step(-700, 700);
+penDown();
+step(100, 100);
+penUp();
+step(400, -400);
+penDown();
+step(100, 100);
+penUp();
+step(-700, 700);
+penDown();
+step(100, 100);
+penUp();
+step(400, -400);
+penDown();
+step(100, 100);
+penUp();
+step(-700, 700);
+penDown();
+step(100, 100);
+penUp();
+step(400, -400);
+penUp();
+step(-650, 650);
+penUp();
+step(67, 67);
+penUp();
+step(650, -650);
+penUp();
+step(250, -250);
+penUp();
+step(33, 33);
+penUp();
+step(-250, 250);
+penDown();
+step(50, 50);
+penUp();
+step(-700, 700);
+penDown();
+step(50, 50);
+penUp();
+step(400, -400);
+penDown();
+step(50, 50);
+penUp();
+step(-700, 700);
+penDown();
+step(50, 50);
+penUp();
+step(400, -400);
+penDown();
+step(50, 50);
+penUp();
+step(-700, 700);
+penDown();
+step(50, 50);
+penUp();
+step(400, -400);
+penDown();
+step(50, 50);
+penUp();
+step(-700, 700);
+penDown();
+step(50, 50);
+penUp();
+step(400, -400);
+penDown();
+step(50, 50);
+penUp();
+step(-700, 700);
+penDown();
+step(50, 50);
+penUp();
+step(400, -400);
+penDown();
+step(50, 50);
+penUp();
+step(-700, 700);
+penDown();
+step(50, 50);
+penUp();
+step(400, -400);
+penUp();
+step(-650, 650);
+penUp();
+step(33, 33);
+penUp();
+step(650, -650);
+}
+
 void step(long lsteps, long rsteps)
 {
+  Serial.print("lsteps="); Serial.println(lsteps);
+  Serial.print("rsteps="); Serial.println(rsteps);
   int dirL = (lsteps > 0) ? FORWARD : BACKWARD;
   int dirR = (rsteps > 0) ? FORWARD : BACKWARD;
   lsteps = abs(lsteps) * (dirL == FORWARD ? LF_CALIBRATION : LB_CALIBRATION);
